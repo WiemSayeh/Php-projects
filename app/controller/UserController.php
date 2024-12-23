@@ -1,50 +1,71 @@
 <?php
+require_once 'app/model/UserModel.php';
 
-require_once '../config/database.php'; // Inclure la connexion à la base de données
-require_once '../app/models/User.php'; // Inclure le modèle User
+class UserController {
 
-class UserController
-{
-    private $db;
-
-    // Le constructeur initialise la connexion à la base de données
-    public function __construct()
-    {
-        // Initialiser la connexion à la base de données
-        $database = new Database();
-        $this->db = $database->connect();
+    public function __construct() {
+        // Démarrer la session si elle n'est pas déjà active
+        if (session_status() == PHP_SESSION_NONE) {
+            session_start();
+        }
     }
 
-    /**
-     * Gère l'enregistrement d'un nouvel utilisateur.
-     */
-    public function register($name, $email, $password)
-    {
-        // Valider les données
-        if (empty($name) || empty($email) || empty($password)) {
-            echo "Tous les champs sont obligatoires.";
-            return;
-        }
+    public function showLoginForm() {
+        include 'app/view/login.php';  // Affiche le formulaire de connexion
+    }
 
-        // Vérifier si l'utilisateur existe déjà avec cet e-mail
-        $userModel = new User($this->db); // Instancier le modèle User avec la connexion DB
-        $existingUser = $userModel->getUserByEmail($email);
+    public function register() {
+        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+            // Vérifier si les champs requis sont présents
+            if (isset($_POST['name'], $_POST['email'], $_POST['password'], $_POST['phone'], $_POST['address'])) {
+                $name = $_POST['name'];
+                $email = $_POST['email'];
+                $password = $_POST['password'];
+                $phone = $_POST['phone'];
+                $address = $_POST['address'];
+                $role = 'user';  // Valeur par défaut pour les utilisateurs
 
-        if ($existingUser) {
-            echo "Cet e-mail est déjà utilisé.";
-            return;
-        }
-
-        // Hasher le mot de passe pour des raisons de sécurité
-        $hashedPassword = password_hash($password, PASSWORD_BCRYPT);
-
-        // Créer l'utilisateur
-        $userId = $userModel->create($name, $email, $hashedPassword);
-
-        if ($userId) {
-            echo "Utilisateur enregistré avec succès. ID : " . $userId;
+                $userModel = new UserModel();
+                $userModel->register($name, $email, $password, $phone, $address, $role);
+                header('Location: index.php?action=login');  // Redirige vers la page de connexion
+                exit();
+            } else {
+                echo "Tous les champs doivent être remplis.";
+            }
         } else {
-            echo "Erreur lors de l'enregistrement.";
+            include 'app/view/register.php';  // Affiche le formulaire d'inscription
         }
     }
-}
+
+    public function login() {
+        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+            // Vérifier si les champs email et password sont remplis
+            if (isset($_POST['email'], $_POST['password'])) {
+                $email = $_POST['email'];
+                $password = $_POST['password'];
+        
+                $userModel = new UserModel();
+                $user = $userModel->login($email, $password);
+        
+                if ($user) {
+                    // Stocker l'utilisateur dans la session
+                    $_SESSION['user'] = $user;
+                    $_SESSION['role'] = $user['role'];
+        
+                    // Vérifier le rôle et rediriger en conséquence
+                    if ($user['role'] == 'admin') {
+                        // Rediriger vers index.php?action=admin
+                        header('Location: index.php?action=admin');
+                    } else {
+                        // Rediriger vers la page de confirmation ou tableau de bord utilisateur
+                        header('Location: index.php?action=confirmation');
+                    }
+                    exit();  // Terminer l'exécution du script
+                } else {
+                    echo "Identifiants incorrects.";
+                }
+            } else {
+            // Afficher le formulaire de connexion
+            include 'app/view/login.php';
+        }}}}
+?>
