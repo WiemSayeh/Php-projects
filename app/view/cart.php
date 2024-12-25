@@ -86,7 +86,7 @@
                 <?php endforeach; ?>
             </ul>
 
-            <form action="index.php?action=login" method="POST" class="cart-footer">
+            <form action="index.php?action=confirmation" method="POST" class="cart-footer">
                 <button type="submit" class="btn btn-primary">Confirmer la commande</button>
             </form>
 
