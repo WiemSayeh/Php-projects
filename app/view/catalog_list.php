@@ -13,12 +13,17 @@ if (session_status() == PHP_SESSION_NONE) {
     <title>Catalogue</title>
     <!-- Lien vers Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    
 </head>
 <body>
     <!-- Navbar -->
     <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
         <div class="container-fluid">
-            <a class="navbar-brand" href="index.php">Mon E-commerce</a>
+
+            <a class="navbar-brand" href="index.php">
+                <img src="public/images/Logo MH.png" alt="Logo de la société" width="200" height="auto">
+            </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
@@ -33,12 +38,12 @@ if (session_status() == PHP_SESSION_NONE) {
                     <?php if (isset($_SESSION['user'])): ?>
                         <!-- Afficher le lien de déconnexion si l'utilisateur est connecté -->
                         <li class="nav-item">
-                            <a class="nav-link" href="logout.php">Se déconnecter</a>
+                            <a class="nav-link" href="index.php?action=logout">Se déconnecter</a>
                         </li>
                     <?php else: ?>
                         <!-- Afficher le lien de connexion si l'utilisateur n'est pas connecté -->
                         <li class="nav-item">
-                            <a class="nav-link" href="login.php">Se connecter</a>
+                            <a class="nav-link" href="index.php?action=login">Se connecter</a>
                         </li>
                     <?php endif; ?>
                 </ul>

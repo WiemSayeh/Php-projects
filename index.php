@@ -25,6 +25,13 @@ switch ($action) {
     case 'login':
         $userController->login();
         break;
+    
+        case 'logout':
+            session_start();
+            session_unset(); // Supprimer toutes les variables de session
+            session_destroy(); // Détruire la session
+            header('Location: index.php'); // Rediriger vers la page d'accueil
+            exit();
 
     case 'admin':
         // Vérifier si l'utilisateur est connecté et est un administrateur
