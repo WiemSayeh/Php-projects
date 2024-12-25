@@ -68,29 +68,34 @@ class UserController {
                 $password = $_POST['password'];
         
                 $userModel = new UserModel();
-                $user = $userModel->login($email, $password);
-        
+                $user = $userModel->verifyLogin($email, $password);  // Utilisez verifyLogin ici
+    
                 if ($user) {
-                    // Stocker l'utilisateur dans la session
-                    $_SESSION['user'] = $user;
-                    $_SESSION['role'] = $user['role'];
+                    // Démarrer la session et stocker les informations de l'utilisateur
+                    session_start();
+                    $_SESSION['user'] = $user;  // Stocker les informations de l'utilisateur
+                    $_SESSION['role'] = $user['role'];  // Stocker le rôle de l'utilisateur
         
                     // Vérifier le rôle et rediriger en conséquence
                     if ($user['role'] == 'admin') {
-                        // Rediriger vers index.php?action=admin
                         header('Location: index.php?action=admin');
                     } else {
-                        // Rediriger vers la page de confirmation ou tableau de bord utilisateur
-                        header('Location: index.php?action=confirmation');
+                        header('Location: index.php?action=confirmation');  // Rediriger vers la page utilisateur
                     }
                     exit();  // Terminer l'exécution du script
                 } else {
+                    // Afficher un message d'erreur si l'utilisateur est incorrect
                     echo "Identifiants incorrects.";
                 }
             } else {
-            // Afficher le formulaire de connexion
+                // Afficher le formulaire de connexion si les champs ne sont pas remplis
+                include 'app/view/login.php';
+            }
+        } else {
+            // Si la requête n'est pas de type POST, afficher le formulaire de connexion
             include 'app/view/login.php';
-        }}}
+        }
+    }
           
         
         }
