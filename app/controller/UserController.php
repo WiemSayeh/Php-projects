@@ -24,11 +24,32 @@ class UserController {
                 $phone = $_POST['phone'];
                 $address = $_POST['address'];
                 $role = 'user';  // Valeur par défaut pour les utilisateurs
-
+    
+                // Créer une instance du modèle UserModel
                 $userModel = new UserModel();
+                // Insérer l'utilisateur dans la base de données
                 $userModel->register($name, $email, $password, $phone, $address, $role);
-                header('Location: index.php?action=login');  // Redirige vers la page de connexion
-                exit();
+    
+                // Vérifier les identifiants après l'inscription
+                $user = $userModel->verifyLogin($email, $password);  // Utiliser la méthode qui vérifie l'utilisateur
+    
+                if ($user) {
+                    // Démarrer la session et stocker les informations de l'utilisateur
+                    session_start();
+                    $_SESSION['user'] = $user;  // Stocker les informations de l'utilisateur
+                    $_SESSION['role'] = $user['role'];  // Stocker le rôle de l'utilisateur
+                    
+                    // Rediriger selon le rôle
+                    if ($user['role'] == 'admin') {
+                        header('Location: index.php?action=admin');
+                    } else {
+                        //header(header: 'Location: index.php?action=confirmation');
+                        header(header: 'Location: index.php?action=catalog');
+                    }
+                    exit();
+                } else {
+                    echo "Erreur lors de la connexion après l'inscription.";
+                }
             } else {
                 echo "Tous les champs doivent être remplis.";
             }
@@ -36,7 +57,9 @@ class UserController {
             include 'app/view/register.php';  // Affiche le formulaire d'inscription
         }
     }
+    
 
+  
     public function login() {
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             // Vérifier si les champs email et password sont remplis
@@ -67,5 +90,9 @@ class UserController {
             } else {
             // Afficher le formulaire de connexion
             include 'app/view/login.php';
-        }}}}
+        }}}
+          
+        
+        }
+
 ?>

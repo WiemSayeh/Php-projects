@@ -1,3 +1,10 @@
+<?php
+// Démarrer la session si elle n'est pas déjà active
+if (session_status() == PHP_SESSION_NONE) {
+    session_start();
+}
+?>
+
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -23,15 +30,30 @@
                     <li class="nav-item">
                         <a class="nav-link" href="index.php?action=catalogue">Catalogue</a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="login.php">Se connecter</a>
-                    </li>
+                    <?php if (isset($_SESSION['user'])): ?>
+                        <!-- Afficher le lien de déconnexion si l'utilisateur est connecté -->
+                        <li class="nav-item">
+                            <a class="nav-link" href="logout.php">Se déconnecter</a>
+                        </li>
+                    <?php else: ?>
+                        <!-- Afficher le lien de connexion si l'utilisateur n'est pas connecté -->
+                        <li class="nav-item">
+                            <a class="nav-link" href="login.php">Se connecter</a>
+                        </li>
+                    <?php endif; ?>
                 </ul>
             </div>
         </div>
     </nav>
 
     <div class="container mt-5">
+        <!-- Affichage du nom et du rôle de l'utilisateur connecté dans le contenu principal -->
+        <?php if (isset($_SESSION['user'])): ?>
+            <div class="alert alert-info text-center">
+                <strong>Bienvenue, <?= htmlspecialchars($_SESSION['user']['name']); ?> <?= htmlspecialchars($_SESSION['role']); ?></strong>
+            </div>
+        <?php endif; ?>
+
         <h1 class="text-center">Catalogue de Produits</h1>
         <div class="row">
             <?php foreach ($products as $product): ?>

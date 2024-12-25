@@ -8,6 +8,7 @@ class UserModel {
         $this->db = Database::getInstance();
     }
 
+    /*
     public function register($name, $email, $password, $phone, $address, $role) {
         // Hachage du mot de passe
         $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
@@ -17,7 +18,32 @@ class UserModel {
                                     VALUES (?, ?, ?, ?, ?, ?, NOW())");
         $stmt->bind_param("ssssss", $name, $email, $hashedPassword, $phone, $address, $role);
         $stmt->execute();
+    }*/
+
+    public function register($name, $email, $password, $phone, $address, $role) {
+        // Vérifier si l'email existe déjà dans la base de données
+        $stmt = $this->db->prepare("SELECT * FROM users WHERE email = ?");
+        $stmt->bind_param("s", $email);
+        $stmt->execute();
+        $result = $stmt->get_result();
+    
+        if ($result->num_rows > 0) {
+            // Si l'email existe déjà, afficher une erreur
+            return "L'email est déjà utilisé.";
+        } else {
+            // Hachage du mot de passe
+            $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
+    
+            // Insérer l'utilisateur dans la base de données
+            $stmt = $this->db->prepare("INSERT INTO users (name, email, password, phone, address, role, created_at) 
+                                        VALUES (?, ?, ?, ?, ?, ?, NOW())");
+            $stmt->bind_param("ssssss", $name, $email, $hashedPassword, $phone, $address, $role);
+            $stmt->execute();
+    
+            return true;  // Retourner true si l'insertion est réussie
+        }
     }
+    
 
  // UserController.php
 public function login() {
