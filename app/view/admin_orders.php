@@ -5,11 +5,21 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Commandes - Admin</title>
     <style>
+        /* Styles généraux */
         body {
             font-family: Arial, sans-serif;
-            background-color: #f4f7fc; /* Bleu clair pour le fond */
+            background-color: #f4f7fc;
             margin: 0;
             padding: 20px;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: white;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
         }
 
         h1 {
@@ -18,12 +28,15 @@
             margin-bottom: 30px;
         }
 
+        /* Tableau */
         table {
             width: 100%;
             border-collapse: collapse;
-            margin: 0 auto;
             background-color: #fff;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            margin-bottom: 30px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            overflow: hidden;
         }
 
         th, td {
@@ -50,30 +63,40 @@
             background-color: #c5d8f7; /* Bleu plus foncé au survol */
         }
 
+        /* Boutons d'action */
+        .action-buttons {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+
+        .btn-action, .btn-back {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #007BFF;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            font-size: 16px;
+            transition: background-color 0.3s ease;
+        }
+
+        .btn-action:hover, .btn-back:hover {
+            background-color: #0056b3;
+        }
+
+        /* Section des messages */
         p {
             text-align: center;
             font-size: 18px;
             color: #888;
         }
 
-        .container {
-            max-width: 1000px;
-            margin: 0 auto;
-        }
-
+        /* Bouton "Retour" */
         .btn-back {
-            display: inline-block;
             margin-top: 20px;
-            padding: 10px 20px;
-            background-color: #007BFF; /* Bleu vif */
-            color: white;
-            text-decoration: none;
-            border-radius: 5px;
-            font-size: 16px;
-        }
-
-        .btn-back:hover {
-            background-color: #0056b3; /* Bleu plus foncé au survol */
+            display: block;
+            text-align: center;
         }
     </style>
 </head>
@@ -107,6 +130,13 @@
         <?php else: ?>
             <p>Aucune commande trouvée.</p>
         <?php endif; ?>
+
+        <!-- Boutons d'action pour l'admin -->
+        <div class="action-buttons">
+            <a href="index.php?action=manage_products" class="btn-action">Gérer les Produits</a>
+            <a href="index.php?action=add_product" class="btn-action">Ajouter un Produit</a>
+            <a href="index.php?action=admin_orders" class="btn-action">Voir les Commandes</a>
+        </div>
 
         <a href="index.php" class="btn-back">Retour à l'accueil</a>
     </div>

@@ -95,5 +95,12 @@
         <?php endif; ?>
     </div>
 
+    <!-- Bouton Retour -->
+    <div class="text-center mt-5">
+            <a href="index.php?action=catalog" class="btn btn-secondary">
+                <i class="bi bi-arrow-left"></i> Retour à la Liste des Produits
+            </a>
+    </div>
+
 </body>
 </html>

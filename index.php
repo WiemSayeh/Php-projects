@@ -35,6 +35,26 @@ switch ($action) {
         }
         break;
 
+    case 'manage_products':
+        // Afficher la liste des produits
+        $adminController->manageProducts();
+        break;
+    case 'edit_product':
+        // Modifier un produit
+        $adminController->editProduct();
+        break;
+
+    case 'add_product':
+        $adminController->addProduct();
+        break;
+
+    case 'delete_product':
+        // Vérifier que l'ID est passé et est valide
+        if (isset($_GET['id'])) {
+            $adminController->deleteProduct($_GET['id']);
+        }
+        break;
+
     case 'catalog':
         $catalogController->showCatalog(); // Afficher le catalogue par défaut
         break;
